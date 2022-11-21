@@ -1,0 +1,72 @@
+# auth policy to allow access of all the applications deployed with in namespace  (app-auth)
+
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+ name: auth-policy
+ namespace: istio-system  # or app-namespace
+spec:
+  action: ALLOW
+  rules:
+    - from: 
+        - source:
+            namespace: ["ns-test"]
+
+
+### or we can use below one also ( 2nd option more specfic )
+
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+ name: auth-policy
+ namespace: istio-system  # or app-namespace
+spec:
+  action: ALLOW
+  rules:
+    - from: 
+        - source:
+            namespace: ["ns-test"]
+      to: 
+      - operation: 
+          methods: ["GET","PUT", "POST", "DELETE"]
+
+
+## ingress auth policy
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+ name: auth-policy
+ namespace: istio-system  # or app-namespace
+spec:
+  action: ALLOW
+  rules:
+    - from: 
+        - source:
+            ipBlocks: 
+              - 10.100.0.0/16
+              - 0.0
+          selector:
+            matchLabels: 
+              istio: ns-appname-gw
+
+
+##  (samba)
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+ name: auth-policy
+ namespace: istio-system  # or app-namespace
+spec:
+  action: DENY
+  rules:
+    - from: 
+        - source:
+            notPrincipals:  ["cluster.local/ns/ns-test/sa/name-etc"]
+          selector:
+            matchLabels: 
+              app: appname-api
+
