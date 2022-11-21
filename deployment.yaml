@@ -1,0 +1,160 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: helloweb
+  namespace: test-namespace
+  annotations:
+   app-name: appname
+   app-comp: appname
+   env: dev
+   ci-num: devlog no
+   top_level_ci_nim: devo no
+   cost_center: '6357'
+   owning_segment: Indian
+   sec_flag: 'false'
+   pii_flag: 'false'
+  labels:
+    app: hello
+spec:
+  progressDeadlineSeconds: 300
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hello
+    strategy:
+    type: RollingUpdate
+    rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 1
+  template:
+    metadata:
+annotations:
+   app-name: appname
+   app-comp: appname
+   env: dev
+   ci-num: devlog no
+   top_level_ci_nim: devo no
+   cost_center: '6357'
+   owning_segment: Indian
+   sec_flag: 'false'
+   pii_flag: 'false'
+   traffic.sidecar.istio.io/excludeOutboundIPRanges: 0.0.0.0/0
+labels:
+   app: hello
+   spec:
+      containers:
+      - name: hello-app
+        image: us-docker.pkg.dev/google-samples/containers/gke/hello-app:1.0
+        securityContext:
+          capabilities: 
+            drop: 
+              - all
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+          cpu: "2048m"
+          memory: 4G
+          requests:
+            cpu: 200m
+            memory: 4G
+        env:
+         - name: spring_profiles_actiavte
+           value: dev
+         - name: client-id
+           value: app-dbid@azurekeyvault 
+        volumeMounts:
+          - name: app-name-configmap
+            mountpath: "/config"
+        volumes:
+          - name: appname-configmap
+            configmap:
+              name: appname-configmap
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  namespace: ns-test
+spec:
+  ports:
+  - name: http
+    port: 8000 
+    targetPort: 80
+    protocol: TCP
+  selector:
+    app: nginx
+  type: ClusterIP
+
+# ---
+# apiVersion: autoscaling/v1
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   annotations:
+#   name: node-example
+#   namespace: default
+# spec:
+#   maxReplicas: 4
+#   minReplicas: 1
+#   scaleTargetRef:
+#     apiVersion: extensions/v1
+#     kind: Deployment
+#     name: node-example
+#   targetCPUUtilizationPercentage: 80
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  annotations:
+  name: node-example
+  namespace: default
+spec:
+  scaleTargetRef: 
+    apiVersion: app/v1
+    kind: Deployment 
+    name: deployment-name
+  minReplicas: 2
+  maxReplicas: 4
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target: 
+           type: Utilization
+           averageUtilization: 80 
+    - type: Resource
+      resource:
+       name: memory
+       target: 
+        type: Utilization
+        averageUtilization: 80
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: zk-pdb
+  namespace: ns-test
+spec:
+  minAvailable: "30%"
+  selector:
+    matchLabels:
+      app: zookeeper
+
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: bookinfo-ratings
+  namespace: ns-test
+spec:
+  host: ratings.prod.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        httpCookie:
+          name: user
+          ttl: 0s
