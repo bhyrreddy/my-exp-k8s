@@ -1,0 +1,66 @@
+apiVersion: spv.no/v2beta1
+kind: AzureKeyVaultSecret
+metadata:
+  name: secret-inject  # give ur secret a name , this will be used in app deployemnt 
+  namespace: akv-test
+spec:
+  vault:
+    name: akv2k8s-test # name of key vault
+    object:
+      name: my-secret # name of the akv object secret to pull from akv secret
+      type: secret # akv object type
+  output:   # optional only to used to sync to k8s secret
+   secret: 
+    name: my-secret    #k8s secret name
+    datakey: secret 
+
+---
+apiVersion: spv.no/v2beta1
+kind: AzureKeyVaultSecret
+metadata:
+  name: smbusr-abc  # give ur secret a name , this will be used in app deployemnt 
+  namespace: akv-test
+spec:
+  vault:
+    name: akv2k8s-test # name of key vault
+    object:
+      name: samba-username  # name of the akv object secret to pull from akv secret
+      type: secret # akv object type
+  output:   # optional only to used to sync to k8s secret
+   secret: 
+    name: sambacreds-abc    #k8s secret name
+    datakey: username 
+
+---
+apiVersion: spv.no/v2beta1
+kind: AzureKeyVaultSecret
+metadata:
+  name: smbpwd-abc  # give ur secret a name , this will be used in app deployemnt 
+  namespace: akv-test
+spec:
+  vault:
+    name: akv2k8s-test # name of key vault
+    object:
+      name: samba-password  # name of the akv object secret to pull from akv secret
+      type: secret # akv object type
+  output:   # optional only to used to sync to k8s secret
+   secret: 
+    name: sambacreds-abc    #k8s secret name
+    datakey: password 
+
+---
+apiVersion: spv.no/v2beta1
+kind: AzureKeyVaultSecret
+metadata:
+  name: smddomain-abc  # give ur secret a name , this will be used in app deployemnt 
+  namespace: akv-test
+spec:
+  vault:
+    name: akv2k8s-test # name of key vault
+    object:
+      name: samba-domain  # name of the akv object secret to pull from akv secret
+      type: secret # akv object type
+  output:   # optional only to used to sync to k8s secret
+   secret: 
+    name: sambacreds-abc    #k8s secret name
+    datakey: domain 
