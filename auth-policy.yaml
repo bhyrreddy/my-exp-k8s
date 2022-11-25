@@ -53,7 +53,7 @@ spec:
               istio: ns-appname-gw
 
 
-##  (samba)
+##  (samba)  # thi is how the lockdown into app: appname-api component is restrcted for only traffic originating from source servicce account to name-etc 
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
