@@ -1,0 +1,64 @@
+---aks ---related ---
+
+
+
+az aks get-credentials --resource-group myresourcegrp --name aksname --admin 
+
+kubectl exec -it cmdbox -- .bin/bash 
+
+
+az login --username name --password pwd --tenant tenant-id 
+
+
+
+
+
+port -forward 
+
+kubectl port-forward service/svc-name -n ns 8080:8080
+
+scaling replicas 
+
+kubectl scale deployment/name-gw --replicas=2 -n ns-name 
+
+
+kubectl get ns ns-test --sow-labels 
+
+
+
+
+
+
+download and insatll az cli 
+
+https://aka.ms/istallazurecliwindows
+
+az login 
+az account set --subscription sub-name 
+az aks get-credentials --resource-group rg-name --name aks-name 
+
+
+with admin rights 
+
+az aks get-credentials --resource-group rg-name --name aks-name --admin
+
+
+
+
+----curl-pod ---
+
+cmdpod :    kubectl run -it --image=mcr.microsoft.com/msql-tools cmdbox 
+
+curl pod :  kubectl run mycurlpod --image=curlimages/curl -i --ty --sh
+
+kubectl exec -it cmdbox -- /bin/bash
+
+curl -v http://appname-svc:8080
+
+
+
+
+----ip available query---
+
+az network vnet check-ip-address --subscription **** -g cac-aks-nonprod-network -n vnet-aks-nonprod-paas-01 --ip-address 10.56.100.222
+
