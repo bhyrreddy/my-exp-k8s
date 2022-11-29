@@ -1,0 +1,87 @@
+azure related
+
+az account set --subscription sub-name
+az login --service-prinicipal --username app-id --password passowrd --teant tenant-id
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+kubectl run -it --image=mcr.microsoft.com/mssql-tools cmdbox --namespace ns-tes 
+
+curl --vv telnet://azurepass.window.net:1433
+
+sqlcmd -S sqlserver -d dbname -U username -P password  
+
+sqlcmd -S dbserver:portno -U user -P passowrd
+
+
+-------cert generate--
+openssl pkcs12 -export -out combinet-cert.p12 -in <downloaded>.cer -inkey <generated>.key  
+
+
+
+az login --service-prinicipal -u name -p pwd --tenant tenant-id
+
+
+---------------akv-------------------- 
+
+az keyvault secret list --vault-name "key-vault-name"
+
+az keyvault key list --vaault-name "key-vault-name"
+
+az keyvault certificate  list --vaault-name "key-vault-name"
+
+-----add -secrets ------------
+
+az keyvault secret set --vault-name akv-name --name "username" --value "password"
+
+----cert-add----
+
+az keyvault certificate import --vault-name="key-vault-name"  -n "name for the cert" -f c:\visual\cert-path
+
+--show-secret
+
+az keyvault secret show --name "secret-name" --vault-name "key-vault-name"
+
+
+--create-vault 
+
+az keyvault create --name "vaault-name" --resource-group "rg-name" --location "EASTUS"
+
+
+--delete -secret---
+
+az keyvault secret delete --name secret-name --vaault-name akv-vault-name
+
+---purge--
+
+az keyvault secret purge --name secret-o1 --vaualt-name keyvaul-name 
+
+---delete-cert 
+
+az keyvault certificate delete --vault-name "akv-name"  --name cert-name 
+
+
+---pem file or big name ----
+
+az keyvault secret set 00vault-name akv-name --name "name of the value"  --value {}
+
+
+--multiple secrets---not recommended ----
+
+az keyvault secret set --vaault-name "akv-anme" --name "no of the secret" --value "{}"
+
+
+--get secret---
+kubectl get secret akv-name -o yaml 
