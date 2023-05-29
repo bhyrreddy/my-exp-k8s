@@ -22,6 +22,21 @@ csi:
    volumeAttributes:
     source: "//path.com/path/"
 nodeStageSecretRef:
-   name: name blabla
+   name: name blabla creds
    namespace: ns-test 
 
+
+---
+apiversion:v1
+kind: persistentVolumeClaim 
+metadata:
+ name: foo-pvc
+ namespace: ns-test
+spec:
+ accessModes:
+ - ReadWriteMany
+ resources:
+  requests:
+   storage: 1GI
+volumename: pv-poc
+storageClassName: ""
