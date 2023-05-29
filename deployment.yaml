@@ -51,6 +51,19 @@ labels:
               - all
         ports:
         - containerPort: 8080
+        #   protocol: 'TCP'
+        # readinessProbe:
+        #   intialDelaySeconds: 180
+        #   periodSeconds: 10
+        #   httpGet:
+        #     path: /advisor/actuator/health/readiness
+        #     port: 8080
+        # livenessProbe:
+        #   intialDelaySeconds: 200
+        #   periodSeconds: 10
+        #   httpGet:
+        #     path: /advisor/actuator/health/liveness
+        #     port: 8080        
         resources:
           limits:
           cpu: "2048m"
@@ -70,6 +83,9 @@ labels:
           - name: appname-configmap
             configmap:
               name: appname-configmap
+              # items:
+              #   - key: application.yaml
+              #     path: application.yaml 
 
 ---
 apiVersion: v1
